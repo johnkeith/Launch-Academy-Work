@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 require 'pry'
 
-word_bank = ["hello", "world", "foo", "bar", "launch", "academy", "zoo", "k"]
+word_bank = File.open("word_list_en.txt").readlines
 
 def select_hidden_word(word_bank)
   hidden_word = word_bank.sample
@@ -24,21 +24,21 @@ def display_chances_left(chances_left)
   puts "\nChances remaining: #{chances_left}"
 end
 
-def check_chances_left(chances_left)
-  sorry if chances_left == 0
+def check_chances_left(chances_left, hidden_word)
+  sorry(hidden_word) if chances_left == 0
 end
 
 def congrats
   puts "You win!"; abort
 end
 
-def sorry
-  puts "You lose!"; abort
+def sorry(hidden_word)
+  puts "You lose! The word was #{hidden_word.join}"; abort
 end
 
 def check_if_guess_correct(input, hidden_word, correct_guesses, chances)
   if hidden_word.include?(input)
-    hidden_word.count(input).times { correct_guesses << input }
+    hidden_word.count(input).times { correct_guesses << input } unless correct_guesses.include?(input)
     true
   else
     puts "Sorry, no #{input}'s found."
@@ -65,20 +65,15 @@ while hidden_word.length != correct_guesses.length
   
   if input.length > 1
     # check to see if the input word is the same as the hidden - either way you exit program
-    hidden_word.join == input ? congrats : sorry
+    hidden_word.join == input ? congrats : sorry(hidden_word)
   else
     #its a character
     check = check_if_guess_correct(input, hidden_word, correct_guesses, chances)
     chances -= 1 if check == false
   end
 
-  check_chances_left(chances)
+  check_chances_left(chances, hidden_word)
 end
 
 congrats
-    # it is a character, check if character is in hidden word, then add to correct_guess array if true 
-    #   if it exists in hidden word, add to correct guesses
-    #     else chances left -1
-    #       call check chances left
-    # end
 
