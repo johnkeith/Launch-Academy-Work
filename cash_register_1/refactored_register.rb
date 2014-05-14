@@ -39,8 +39,6 @@ end
 # add price to array
 # convert to f
 
-
-
 # prompt user for amount given
 def get_amount_given
   puts "What is the amount tendered?"
@@ -96,12 +94,3 @@ else
   # output warning
   warning(change)
 end
-
-
-
-
-
-  
-  
-
-
